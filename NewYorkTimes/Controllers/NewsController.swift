@@ -9,12 +9,14 @@ import UIKit
 
 class NewsController: UIViewController {
     
+    @IBOutlet weak var menuBar: MenuBar!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
 
     private var newsListViewModel: NewsListViewModel!
     let refreshControl = UIRefreshControl()
-
+    var selectedSection: String = "home"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUI()
@@ -23,6 +25,7 @@ class NewsController: UIViewController {
     }
     
     private func setUI() {
+        menuBar.delegate = self
         //        Configure tableview
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 100
@@ -41,7 +44,7 @@ class NewsController: UIViewController {
     
     @objc func refresh(_ sender: AnyObject) {
        // Code to refresh table view
-        self.fetchNews()
+        self.fetchNews(isRefresh: true)
     }
 
     //    Set navigation bar
@@ -51,10 +54,14 @@ class NewsController: UIViewController {
     }
     
     //    #MARK: Fetch Top news
-    private func fetchNews() {
-        self.tableView.separatorStyle = .none
-        activityIndicator.startAnimating()
-        NewsWebServices().getTopStories(selectedSection: "home") { newsList in
+    private func fetchNews(isRefresh: Bool = false) {
+        if !isRefresh {
+            self.newsListViewModel = nil
+            self.tableView.reloadData()
+            self.tableView.separatorStyle = .none
+            activityIndicator.startAnimating()
+        }
+        NewsWebServices().getTopStories(selectedSection: self.selectedSection) { newsList in
             if let newsArr = newsList {
                 self.newsListViewModel = NewsListViewModel(newsList: newsArr)
                 DispatchQueue.main.async {
@@ -84,6 +91,7 @@ extension NewsController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = newsListViewModel.newsAtIndex(indexPath.row)
+        guard let title = item.title, title.count > 0 else { return }
         let detailVC = mainStoryBoard.instantiateViewController(withIdentifier: "NewsDetailVC") as! NewsDetailVC
         detailVC.newsDetail = item
         self.navigationController?.pushViewController(detailVC, animated: true)
@@ -91,5 +99,15 @@ extension NewsController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
+    }
+}
+
+//#MARK: MenuBar delegate
+extension NewsController: MenuBarDelegate {
+    
+//    Fetch news based on section selection
+    func newsSectionSelected(section: String) {
+        self.selectedSection = section
+        self.fetchNews()
     }
 }

@@ -11,16 +11,12 @@ class NewsDetailVC: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var seeMoreBtn: UIButton!
     @IBOutlet weak var newsSectionLbl: UILabel!
     @IBOutlet weak var newsTitleLbl: UILabel!
     @IBOutlet weak var newsDescriptionLbl: UILabel!
     @IBOutlet weak var publishedDateTimeLbl: UILabel!
     @IBOutlet weak var authorNameLbl: UILabel!
-    @IBOutlet weak var seperationRoundLbl: UILabel! {
-        didSet {
-            self.seperationRoundLbl.layer.cornerRadius = self.seperationRoundLbl.frame.height / 2
-        }
-    }
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
@@ -41,6 +37,9 @@ class NewsDetailVC: UIViewController {
         guard let newsData = newsDetail else { return }
         activityIndicator.startAnimating()
         
+        if let url = newsData.url, url.count == 0 {
+            self.seeMoreBtn.isHidden = true
+        }
         self.newsSectionLbl.text = newsData.section?.uppercased()
         self.newsTitleLbl.text = newsData.title
         self.newsDescriptionLbl.text = newsData.abstract
@@ -57,29 +56,47 @@ class NewsDetailVC: UIViewController {
             if let url = URL(string: largeImgData.url!) {
                 self.loadImage(url: url)
             }
+        } else {
+            self.activityIndicator.stopAnimating()
+            self.imageView.image = UIImage(named: "placeholder_bg")
         }
     }
     
     //    Load image from the given url
     func loadImage(url: URL) {
         //    UUID returned by the loader is stored in a constant
-        let token = ImageLoader.sharedInstance.loadImage(url) { result in
-            do {
-                //            Extract the result
-                let img = try result.get()
+        let _ = ImageLoader.sharedInstance.loadImage(url) { result in
+            switch result {
+            case .success(let img):
                 //            On success, display image using main thread
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
                     self.imageView.image = img
                 }
-            } catch {
+            case .failure(let error):
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
-                    self.imageView.image = UIImage(named: "placeholder_img")
+                    self.imageView.image = UIImage(named: "placeholder_bg")
                 }
                 //            On failure, print the error
                 print("Error in fetching images: \(error.localizedDescription)")
             }
+//            do {
+//                //            Extract the result
+//                let img = try result.get()
+//                //            On success, display image using main thread
+//                DispatchQueue.main.async {
+//                    self.activityIndicator.stopAnimating()
+//                    self.imageView.image = img
+//                }
+//            } catch {
+//                DispatchQueue.main.async {
+//                    self.activityIndicator.stopAnimating()
+//                    self.imageView.image = UIImage(named: "placeholder_bg")
+//                }
+//                //            On failure, print the error
+//                print("Error in fetching images: \(error.localizedDescription)")
+//            }
         }
     }
     
@@ -102,7 +119,7 @@ class NewsDetailVC: UIViewController {
     }
     
     private func readMoreNews() {
-        guard let newsData = newsDetail, let url = newsData.url else {
+        guard let newsData = newsDetail, let url = newsData.url, url.count > 0 else {
             return
         }
         let webViewVC = mainStoryBoard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC

@@ -17,8 +17,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CNf-r1-xwe" customClass="MenuBar" customModule="NewYorkTimes" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="414" height="50"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="CXM-NS-cmo"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kxD-q7-rqD">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="94" width="414" height="768"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="NewsCell" rowHeight="120" id="1fP-8X-sO0" customClass="NewsCell" customModule="News" customModuleProvider="target">
@@ -90,20 +97,24 @@
                         <viewLayoutGuide key="safeArea" id="0Ag-nl-kYW"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="0Ag-nl-kYW" firstAttribute="trailing" secondItem="CNf-r1-xwe" secondAttribute="trailing" id="1PC-1q-pra"/>
                             <constraint firstItem="0Ag-nl-kYW" firstAttribute="trailing" secondItem="kxD-q7-rqD" secondAttribute="trailing" id="3ug-0L-HIL"/>
-                            <constraint firstItem="kxD-q7-rqD" firstAttribute="top" secondItem="0Ag-nl-kYW" secondAttribute="top" id="Ryv-fd-Vby"/>
+                            <constraint firstItem="CNf-r1-xwe" firstAttribute="leading" secondItem="0Ag-nl-kYW" secondAttribute="leading" id="LXy-JX-Fmj"/>
+                            <constraint firstItem="kxD-q7-rqD" firstAttribute="top" secondItem="CNf-r1-xwe" secondAttribute="bottom" id="frx-UH-uus"/>
                             <constraint firstItem="kxD-q7-rqD" firstAttribute="leading" secondItem="0Ag-nl-kYW" secondAttribute="leading" id="goA-s3-NSS"/>
+                            <constraint firstItem="CNf-r1-xwe" firstAttribute="top" secondItem="0Ag-nl-kYW" secondAttribute="top" id="qIc-pq-0Ds"/>
                             <constraint firstItem="0Ag-nl-kYW" firstAttribute="bottom" secondItem="kxD-q7-rqD" secondAttribute="bottom" id="uee-8d-I9E"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="9El-qc-KL0" id="nzd-Zl-Br3"/>
+                        <outlet property="menuBar" destination="CNf-r1-xwe" id="yj7-Y9-dTd"/>
                         <outlet property="tableView" destination="kxD-q7-rqD" id="Umz-Xt-bFs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9c0-JE-5Qb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1790" y="191"/>
+            <point key="canvasLocation" x="-1791.304347826087" y="190.84821428571428"/>
         </scene>
         <!--News DetailVC-->
         <scene sceneID="1pe-q7-qx8">
@@ -157,7 +168,7 @@
                                                 <rect key="frame" x="147" y="341.5" width="120" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="rVz-AU-Iy6"/>
-                                                    <constraint firstAttribute="width" constant="120" id="xmL-Rx-hEk"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="xmL-Rx-hEk"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="See More">
@@ -231,6 +242,7 @@
                         <outlet property="newsTitleLbl" destination="gJC-V9-Oap" id="8tE-GX-MtK"/>
                         <outlet property="publishedDateTimeLbl" destination="Zh6-zS-IGZ" id="svJ-be-8kL"/>
                         <outlet property="scrollView" destination="wNU-Ih-grx" id="WgI-o3-di1"/>
+                        <outlet property="seeMoreBtn" destination="juW-wa-P4A" id="GG3-6e-VxG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hKg-xh-ioH" sceneMemberID="firstResponder"/>

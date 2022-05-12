@@ -38,6 +38,10 @@ class NewsCell: UITableViewCell {
 //                    DispatchQueue.main.async {
 //                        self.itemImgView.image = img
 //                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.itemImgView.image = UIImage(named: "placeholder_bg")
+                    }
                 }
             }
             

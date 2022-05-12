@@ -24,7 +24,7 @@ class WebViewVC: UIViewController {
     }
     
     private func loadUrl() {
-        guard let webUrl = newsBlogUrl else { return }
+        guard let webUrl = newsBlogUrl, webUrl.count > 0 else { return }
         webView.load(URLRequest(url: URL(string: webUrl)!))
     }
 }

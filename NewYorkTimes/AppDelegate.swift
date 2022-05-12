@@ -7,30 +7,42 @@
 
 import UIKit
 
-@main
+@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+
+        UIApplication.shared.statusBarView?.backgroundColor = .black
+        self.setInitialRootController()
         return true
     }
-
-    // MARK: UISceneSession Lifecycle
-
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    
+    private func setInitialRootController() {
+        let initialVC = mainStoryBoard.instantiateViewController(withIdentifier: "NewsController") as! NewsController
+        self.window?.rootViewController = setNavigationController(currentVC: initialVC)
+        self.window?.makeKeyAndVisible()
     }
-
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    
+    func setNavigationController(currentVC: UIViewController) -> UINavigationController {
+        let navVC = UINavigationController(rootViewController: currentVC)
+        navVC.navigationBar.tintColor = .white
+        navVC.navigationBar.backgroundColor = .black
+        navVC.navigationBar.shadowImage = UIImage()
+        navVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 24, weight: .bold)]
+        navVC.navigationBar.barStyle = .black
+        return navVC
     }
-
 
 }
 
+extension UIApplication {
+    var statusBarView: UIView? {
+        if responds(to: Selector(("statusBar"))) {
+            return value(forKey: "statusBar") as? UIView
+        }
+        return nil
+    }
+}

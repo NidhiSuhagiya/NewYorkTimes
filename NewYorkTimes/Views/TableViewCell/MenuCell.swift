@@ -48,5 +48,7 @@ class MenuCell: UICollectionViewCell {
         titleLbl.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor, constant: 0).isActive = true
         titleLbl.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 15).isActive = true
         titleLbl.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -15).isActive = true
+//        titleLbl.topAnchor.constraint(greaterThanOrEqualTo: self.contentView.topAnchor, constant: 5).isActive = true
+//        titleLbl.bottomAnchor.constraint(greaterThanOrEqualTo: self.contentView.bottomAnchor, constant: -5).isActive = true
     }
 }

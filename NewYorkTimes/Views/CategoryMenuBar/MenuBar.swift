@@ -17,9 +17,9 @@ class MenuBar: UIView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = UIColor.black
         cv.showsVerticalScrollIndicator = false
         cv.showsHorizontalScrollIndicator = false
+        cv.backgroundColor = .clear
         return cv
     }()
     
@@ -39,6 +39,8 @@ class MenuBar: UIView {
     }
     
     private func setUpView() {
+        self.backgroundColor = UIColor.black
+
         //        self.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         collectionView.register(MenuCell.self, forCellWithReuseIdentifier: cellId)
         
@@ -46,8 +48,9 @@ class MenuBar: UIView {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
-        collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0).isActive = true
+        
+        collectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         
         collectionView.delegate = self
         collectionView.dataSource = self

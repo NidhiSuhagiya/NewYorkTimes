@@ -47,10 +47,7 @@ class NewsCell: UITableViewCell {
                     self.loadImage(url: url)
                 }
             } else {
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
-                    self.itemImgView.image = UIImage(named: "placeholder_bg")
-                }
+                self.setDefaultPlaceholderImage()
             }
         }
     }
@@ -65,14 +62,12 @@ class NewsCell: UITableViewCell {
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
                     self.itemImgView.image = img
+                    self.itemImgView.backgroundColor = .clear
                 }
             case .failure(let error):
                 //            On failure, print the error and set default placeholder image
                 print("Error in fetching images: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
-                    self.itemImgView.image = UIImage(named: "placeholder_bg")
-                }
+                self.setDefaultPlaceholderImage()
             }
         }
         
@@ -82,6 +77,13 @@ class NewsCell: UITableViewCell {
                 ImageLoader.sharedInstance.cancelLoad(token)
             }
         }
-        
+    }
+    
+    private func setDefaultPlaceholderImage() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+            self.itemImgView.image = UIImage(named: "placeholder_bg")
+            self.itemImgView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        }
     }
 }

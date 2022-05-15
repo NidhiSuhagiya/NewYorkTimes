@@ -8,6 +8,7 @@
 import Foundation
 
 struct NewsResponseModel : Codable {
+    
     let status : String?
     let section : String?
     let num_results : Int?
@@ -38,6 +39,7 @@ struct NewsResults : Codable {
     let url : String?
     let authorName : String?
     let published_date : String?
+    var formattedPublishedDate: String? { return convertPublishDateToStr(dateStr: published_date) }
     let multimedia : [NewsMultimedia]?
     
     enum CodingKeys: String, CodingKey {
@@ -61,6 +63,17 @@ struct NewsResults : Codable {
         multimedia = try values.decodeIfPresent([NewsMultimedia].self, forKey: .multimedia)
     }
     
+    //    Convert received date string to the custom string (10 May 2022)
+    private func convertPublishDateToStr(dateStr: String?) -> String {
+        //        2022-05-09T04:39:33-04:00
+        guard let currentDate = dateStr else { return "" }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        let convertedDate = dateFormatter.date(from: currentDate)
+        dateFormatter.dateFormat = "dd MMM YYYY"
+        let newDateStr = dateFormatter.string(from: convertedDate!)
+        return newDateStr
+    }
 }
 
 struct NewsMultimedia : Codable {

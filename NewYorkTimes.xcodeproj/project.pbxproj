@@ -23,6 +23,7 @@
 		83869FF0282D3E8E00F646DF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83869FEF282D3E8E00F646DF /* WebKit.framework */; };
 		83869FF7282D439C00F646DF /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83869FF6282D439C00F646DF /* MenuBar.swift */; };
 		83869FFB282D4BC600F646DF /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83869FFA282D4BC600F646DF /* MenuCell.swift */; };
+		83869FFE2831373F00F646DF /* NewsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83869FFD2831373F00F646DF /* NewsCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		83869FEF282D3E8E00F646DF /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		83869FF6282D439C00F646DF /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		83869FFA282D4BC600F646DF /* MenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
+		83869FFD2831373F00F646DF /* NewsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,7 +157,7 @@
 		83869FE2282D060800F646DF /* TableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				83869FE6282D2C3900F646DF /* NewsCell.swift */,
+				83869FFC2831372A00F646DF /* NewsCell */,
 				83869FFA282D4BC600F646DF /* MenuCell.swift */,
 			);
 			path = TableViewCell;
@@ -184,6 +186,15 @@
 				83869FF6282D439C00F646DF /* MenuBar.swift */,
 			);
 			path = CategoryMenuBar;
+			sourceTree = "<group>";
+		};
+		83869FFC2831372A00F646DF /* NewsCell */ = {
+			isa = PBXGroup;
+			children = (
+				83869FE6282D2C3900F646DF /* NewsCell.swift */,
+				83869FFD2831373F00F646DF /* NewsCell.xib */,
+			);
+			path = NewsCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,6 +257,7 @@
 			files = (
 				83869FCE282CC2D300F646DF /* LaunchScreen.storyboard in Resources */,
 				83869FCB282CC2D300F646DF /* Assets.xcassets in Resources */,
+				83869FFE2831373F00F646DF /* NewsCell.xib in Resources */,
 				83869FC9282CC2D000F646DF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

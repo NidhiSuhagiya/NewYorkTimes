@@ -12,7 +12,7 @@ class WebViewVC: UIViewController {
     
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-
+    
     var newsBlogUrl: String?
     
     override func viewDidLoad() {
@@ -29,6 +29,7 @@ class WebViewVC: UIViewController {
     }
 }
 
+//#MARK: WKNavigation delegate 
 extension WebViewVC: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {

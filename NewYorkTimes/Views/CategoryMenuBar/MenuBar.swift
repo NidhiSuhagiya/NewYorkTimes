@@ -52,11 +52,13 @@ class MenuBar: UIView {
         collectionView.delegate = self
         collectionView.dataSource = self
         
+//        Set first section as default section (Set it as selected section)
         let selectedIndexPath = IndexPath(item: 0, section: 0)
         collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: .top)
     }
 }
 
+//#MARK: Collection view delegate and datasource
 extension MenuBar: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

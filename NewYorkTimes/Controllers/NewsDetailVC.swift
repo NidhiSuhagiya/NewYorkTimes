@@ -24,12 +24,21 @@ class NewsDetailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         // Do any additional setup after loading the view.
+        self.setNavBar()
+        self.setUI()
+        self.setNewsData()
+    }
+    
+    private func setNavBar() {
         self.navigationItem.title = "The New York Times"
         self.navigationItem.backButtonTitle = ""
+    }
+    
+    private func setUI() {
         self.imageView.layer.cornerRadius = 15
         self.activityIndicator.hidesWhenStopped = true
-        self.setNewsData()
     }
     
     //    Set news data
@@ -43,11 +52,12 @@ class NewsDetailVC: UIViewController {
         self.newsSectionLbl.text = newsData.section?.uppercased()
         self.newsTitleLbl.text = newsData.title
         self.newsDescriptionLbl.text = newsData.abstract
-        if let publishedDate = newsData.published_date {
-            self.publishedDateTimeLbl.text = self.convertPublishDateToStr(dateStr: publishedDate)
-        } else {
-            self.publishedDateTimeLbl.text = ""
-        }
+        self.publishedDateTimeLbl.text = newsData.formattedPublishedDate
+//        if let publishedDate = newsData.published_date {
+//            self.publishedDateTimeLbl.text = self.convertPublishDateToStr(dateStr: publishedDate)
+//        } else {
+//            self.publishedDateTimeLbl.text = ""
+//        }
         self.authorNameLbl.text = newsData.authorName
         if let mediaArr = newsData.multimedia, let index = mediaArr.firstIndex(where: { item in
             item.format == ImageFormat.largeImage.description
@@ -74,6 +84,7 @@ class NewsDetailVC: UIViewController {
                     self.imageView.image = img
                 }
             case .failure(let error):
+                //            On failure, Set default placeholder image
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
                     self.imageView.image = UIImage(named: "placeholder_bg")
@@ -81,38 +92,10 @@ class NewsDetailVC: UIViewController {
                 //            On failure, print the error
                 print("Error in fetching images: \(error.localizedDescription)")
             }
-//            do {
-//                //            Extract the result
-//                let img = try result.get()
-//                //            On success, display image using main thread
-//                DispatchQueue.main.async {
-//                    self.activityIndicator.stopAnimating()
-//                    self.imageView.image = img
-//                }
-//            } catch {
-//                DispatchQueue.main.async {
-//                    self.activityIndicator.stopAnimating()
-//                    self.imageView.image = UIImage(named: "placeholder_bg")
-//                }
-//                //            On failure, print the error
-//                print("Error in fetching images: \(error.localizedDescription)")
-//            }
         }
     }
     
-    //    Convert received date string to the custom string (10 May 2022)
-    private func convertPublishDateToStr(dateStr: String) -> String {
-        //        2022-05-09T04:39:33-04:00
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        let convertedDate = dateFormatter.date(from: dateStr)
-        dateFormatter.dateFormat = "dd MMM YYYY"
-        let newDateStr = dateFormatter.string(from: convertedDate!)
-        return newDateStr
-    }
-    //APP ID: d16bc33c-751b-41bb-bfdb-7b97fda14f30
     //API KEY: nBAln1lClbtS9K5KPSHcFwzeGnKZOh5I
-    
     
     @IBAction func seeMoreNewsBtnPressed(_ sender: Any) {
         self.readMoreNews()

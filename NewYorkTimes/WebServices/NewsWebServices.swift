@@ -9,12 +9,16 @@ import Foundation
 
 class NewsWebServices {
     
+    /// Fetch top news stories from server
+    /// - Parameters:
+    ///   - selectedSection: section name to fetch news of that section
+    ///   - completion: closure to return response
     func getTopStories(selectedSection: String, completion: @escaping ([NewsResults]?) -> ()) {
         
-        let apiUrl = "https://api.nytimes.com/svc/topstories/v2/" + selectedSection + ".json"
+        let apiUrl = ApiInfo.baseUrl + selectedSection + ApiInfo.apiExtension
         
         if var urlComponents = URLComponents(string: apiUrl) {
-            urlComponents.query = "api-key=nBAln1lClbtS9K5KPSHcFwzeGnKZOh5I"
+            urlComponents.query = "api-key=" + ApiInfo.newYorkTimesApiKey
             
             URLSession.shared.dataTask(with: urlComponents.url!) { data, response, error in
                 guard let responseData = data else {

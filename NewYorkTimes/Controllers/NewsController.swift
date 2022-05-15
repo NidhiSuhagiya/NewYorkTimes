@@ -12,7 +12,9 @@ class NewsController: UIViewController {
     @IBOutlet weak var menuBar: MenuBar!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
-
+    @IBOutlet weak var noDataFoundLbl: UILabel!
+    
+    //    private var newsListViewModel: NewsListViewModel!
     private var newsListViewModel: NewsListViewModel!
     let refreshControl = UIRefreshControl()
     var selectedSection: String = "home"
@@ -25,52 +27,57 @@ class NewsController: UIViewController {
     }
     
     private func setUI() {
+        newsListViewModel = NewsListViewModel()
         menuBar.delegate = self
         //        Configure tableview
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 100
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        self.tableView.register(UINib(nibName: String(describing: NewsCell.self), bundle: nil), forCellReuseIdentifier: NewsCell.reuseIdentifier)
         
         //        Add activity indicator
         self.tableView.backgroundView = activityIndicator
         self.activityIndicator.center = self.tableView.backgroundView!.center
         activityIndicator.hidesWhenStopped = true
         
-//        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl) // not required when using UITableViewController
     }
     
     @objc func refresh(_ sender: AnyObject) {
-       // Code to refresh table view
+        // Code to refresh table view
         self.fetchNews(isRefresh: true)
     }
-
+    
     //    Set navigation bar
     private func setNavBar() {
         self.navigationItem.title = "The New York Times"
         self.navigationItem.backButtonTitle = ""
     }
     
-    //    #MARK: Fetch Top news
+    /// Fetch top news
+    /// - Parameter isRefresh: Used to clear the existing data to fetch new data from server based on section, if it is false otherwisr just refresh the existing section data
     private func fetchNews(isRefresh: Bool = false) {
         if !isRefresh {
-            self.newsListViewModel = nil
+            self.newsListViewModel.clearNewsListToLoadNewSection()
             self.tableView.reloadData()
             self.tableView.separatorStyle = .none
             activityIndicator.startAnimating()
         }
-        NewsWebServices().getTopStories(selectedSection: self.selectedSection) { newsList in
-            if let newsArr = newsList {
-                self.newsListViewModel = NewsListViewModel(newsList: newsArr)
-                DispatchQueue.main.async {
-                    self.refreshControl.endRefreshing()
-                    self.activityIndicator.stopAnimating()
-                    self.tableView.separatorStyle = .singleLine
-                    self.tableView.reloadData()
-                }
-            }
+        newsListViewModel.fetchNews(selectedSection: self.selectedSection) { newsList in
+            self.updateUI()
+        }
+    }
+    
+    //    Update UI after fetching the news from server
+    private func updateUI() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.refreshControl.endRefreshing()
+            self.activityIndicator.stopAnimating()
+            self.tableView.separatorStyle = self.newsListViewModel.isNewsListEmpty ? .none : .singleLine
+            self.noDataFoundLbl.isHidden = !self.newsListViewModel.isNewsListEmpty
         }
     }
 }
@@ -79,11 +86,11 @@ class NewsController: UIViewController {
 extension NewsController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsListViewModel == nil ? 0 : newsListViewModel.numberOfRows
+        return newsListViewModel.numberOfRows//newsListViewModel == nil ? 0 : newsListViewModel.numberOfRows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! NewsCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsCell.reuseIdentifier, for: indexPath) as! NewsCell
         let item = newsListViewModel.newsAtIndex(indexPath.row)
         cell.configureCell(newsItem: item)
         return cell
@@ -105,7 +112,7 @@ extension NewsController: UITableViewDelegate, UITableViewDataSource {
 //#MARK: MenuBar delegate
 extension NewsController: MenuBarDelegate {
     
-//    Fetch news based on section selection
+    //    Fetch news based on section selection
     func newsSectionSelected(section: String) {
         self.selectedSection = section
         self.fetchNews()

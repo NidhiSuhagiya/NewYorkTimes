@@ -24,7 +24,7 @@ class NewsDetailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         self.setNavBar()
         self.setUI()
@@ -49,16 +49,14 @@ class NewsDetailVC: UIViewController {
         if let url = newsData.url, url.count == 0 {
             self.seeMoreBtn.isHidden = true
         }
+        
         self.newsSectionLbl.text = newsData.section?.uppercased()
         self.newsTitleLbl.text = newsData.title
         self.newsDescriptionLbl.text = newsData.abstract
         self.publishedDateTimeLbl.text = newsData.formattedPublishedDate
-//        if let publishedDate = newsData.published_date {
-//            self.publishedDateTimeLbl.text = self.convertPublishDateToStr(dateStr: publishedDate)
-//        } else {
-//            self.publishedDateTimeLbl.text = ""
-//        }
         self.authorNameLbl.text = newsData.authorName
+        
+        //        Load image from the url if it exist otherwise set placeholder image
         if let mediaArr = newsData.multimedia, let index = mediaArr.firstIndex(where: { item in
             item.format == ImageFormat.largeImage.description
         }) {
@@ -94,8 +92,6 @@ class NewsDetailVC: UIViewController {
             }
         }
     }
-    
-    //API KEY: nBAln1lClbtS9K5KPSHcFwzeGnKZOh5I
     
     @IBAction func seeMoreNewsBtnPressed(_ sender: Any) {
         self.readMoreNews()

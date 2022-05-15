@@ -17,10 +17,15 @@ class WebViewVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setUI()
+        self.loadUrl()
+    }
+    
+    private func setUI() {
+        self.navigationItem.title = "The New York Times"
         self.activityIndicator.startAnimating()
         self.activityIndicator.hidesWhenStopped = true
         self.webView.navigationDelegate = self
-        self.loadUrl()
     }
     
     private func loadUrl() {
